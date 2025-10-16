@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Calculator App</title>
-    <!-- Using Bootstrap for a clean, responsive look -->
+    <title>Advanced Minimal Calculator App</title>
+    <link rel="license" href="https://api.github.com/licenses/MIT">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -13,12 +13,13 @@
             align-items: center;
             min-height: 100vh;
             background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .calculator {
             width: 320px;
             border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
             background-color: #ffffff;
         }
         #display {
@@ -28,31 +29,46 @@
             font-size: 2.5rem;
             text-align: right;
             padding: 10px 20px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
             overflow-x: auto;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
         .btn-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
         }
         .btn {
-            border: 1px solid #e9ecef;
-            font-size: 1.5rem;
+            border: none;
+            font-size: 1.4rem;
             padding: 20px 0;
             cursor: pointer;
-            transition: background-color 0.1s;
+            transition: background-color 0.1s, transform 0.05s;
+            height: 70px;
+            border-radius: 0 !important; /* Override Bootstrap default rounding */
+        }
+        .btn:active {
+            transform: scale(0.98);
         }
         .btn:hover {
-            background-color: #e9ecef;
+            filter: brightness(95%);
         }
-        .btn-operator {
-            background-color: #ffc107;
+        .btn-num-op {
+            background-color: #e9ecef;
             color: #212529;
         }
+        .btn-num-op:hover {
+            background-color: #dee2e6;
+        }
+        .btn-operator {
+            background-color: #fd7e14;
+            color: white;
+        }
         .btn-operator:hover {
-            background-color: #e0a800;
+            background-color: #d66a0e;
         }
         .btn-clear {
             background-color: #dc3545;
@@ -68,46 +84,51 @@
         .btn-equal:hover {
             background-color: #218838;
         }
+        .btn-utility {
+            background-color: #adb5bd;
+            color: #212529;
+            font-size: 1.2rem;
+        }
+        .btn-utility:hover {
+            background-color: #9ca3a9;
+        }
     </style>
 </head>
 <body>
-
     <div class="calculator">
         <!-- Display Area -->
         <div id="display">0</div>
 
         <!-- Button Grid -->
         <div class="btn-grid">
-            <!-- Row 1: Clear, Operators -->
-            <button class="btn btn-clear" data-value="C">C</button>
-            <button class="btn btn-operator" data-value="/">/</button>
-            <button class="btn btn-operator" data-value="*">&times;</button>
-            <button class="btn btn-operator" data-value="-">-</button>
+            <!-- Row 1: Utility & Clear -->
+            <button class="btn btn-utility" data-value="sqrt">&#8730;</button>
+            <button class="btn btn-utility" data-value="%">%</button>
+            <button class="btn btn-clear" data-value="C">AC</button>
+            <button class="btn btn-operator" data-value="/">&divide;</button>
 
             <!-- Row 2: Numbers 7, 8, 9, Operator -->
-            <button class="btn" data-value="7">7</button>
-            <button class="btn" data-value="8">8</button>
-            <button class="btn" data-value="9">9</button>
+            <button class="btn btn-num-op" data-value="7">7</button>
+            <button class="btn btn-num-op" data-value="8">8</button>
+            <button class="btn btn-num-op" data-value="9">9</button>
+            <button class="btn btn-operator" data-value="*">&times;</button>
+
+            <!-- Row 3: Numbers 4, 5, 6, Operator -->
+            <button class="btn btn-num-op" data-value="4">4</button>
+            <button class="btn btn-num-op" data-value="5">5</button>
+            <button class="btn btn-num-op" data-value="6">6</button>
+            <button class="btn btn-operator" data-value="-">-</button>
+
+            <!-- Row 4: Numbers 1, 2, 3, Operator -->
+            <button class="btn btn-num-op" data-value="1">1</button>
+            <button class="btn btn-num-op" data-value="2">2</button>
+            <button class="btn btn-num-op" data-value="3">3</button>
             <button class="btn btn-operator" data-value="+">+</button>
 
-            <!-- Row 3: Numbers 4, 5, 6 -->
-            <button class="btn" data-value="4">4</button>
-            <button class="btn" data-value="5">5</button>
-            <button class="btn" data-value="6">6</button>
-            <!-- Placeholder for alignment, though grid structure handles it -->
-            <div></div> 
-
-            <!-- Row 4: Numbers 1, 2, 3 -->
-            <button class="btn" data-value="1">1</button>
-            <button class="btn" data-value="2">2</button>
-            <button class="btn" data-value="3">3</button>
+            <!-- Row 5: 0, ., =, Equal -->
+            <button class="btn btn-num-op" data-value="0" style="grid-column: span 2;">0</button>
+            <button class="btn btn-num-op" data-value=".">.</button>
             <button class="btn btn-equal" data-value="=">=</button>
-        </div>
-
-        <!-- Row 5: 0, ., = (adjusted layout for standard calculators) -->
-        <div class="btn-grid" style="grid-template-columns: repeat(3, 1fr); border-top: 1px solid #e9ecef;">
-            <button class="btn" data-value="0" style="grid-column: span 2;">0</button>
-            <button class="btn" data-value=".">.</button>
         </div>
     </div>
 
@@ -122,9 +143,9 @@
             let waitingForNewNumber = true;
 
             // Function to update the display
-            const updateDisplay = () => {
-                // Ensure the display does not overflow excessively, although CSS handles basic overflow
-                display.textContent = currentInput.substring(0, 15); 
+            const updateDisplay = (text = currentInput) => {
+                // Limit display length but handle errors gracefully
+                display.textContent = String(text).substring(0, 15); 
             };
 
             // Handle numerical input and decimal point
@@ -139,25 +160,13 @@
                 updateDisplay();
             };
 
-            // Handle operator input
-            const handleOperator = (nextOperator) => {
-                const inputValue = parseFloat(currentInput);
-
-                if (previousValue === null) {
-                    previousValue = inputValue;
-                } else if (operator) {
-                    const result = calculate(previousValue, inputValue, operator);
-                    currentInput = String(result);
-                    previousValue = result;
-                }
-
-                waitingForNewNumber = true;
-                operator = nextOperator === '=' ? null : nextOperator;
-                updateDisplay();
-            };
-
             // Core calculation logic
             const calculate = (first, second, op) => {
+                first = parseFloat(first);
+                second = parseFloat(second);
+
+                if (isNaN(first) || isNaN(second)) return NaN;
+
                 try {
                     switch (op) {
                         case '+':
@@ -175,13 +184,64 @@
                             return second;
                     }
                 } catch (error) {
-                    currentInput = "Error";
-                    previousValue = null;
+                    console.error(error);
+                    return "Error";
+                }
+            };
+            
+            // Handle special functions (Square Root, Percentage)
+            const handleUtility = (utility) => {
+                const currentValue = parseFloat(currentInput);
+
+                if (isNaN(currentValue)) return;
+
+                if (utility === 'sqrt') {
+                    if (currentValue < 0) {
+                        currentInput = "Error";
+                        waitingForNewNumber = true;
+                    } else {
+                        currentInput = String(Math.sqrt(currentValue));
+                        waitingForNewNumber = true;
+                    }
+                } else if (utility === '%') {
+                    // Percentage: Divide current value by 100
+                    currentInput = String(currentValue / 100);
+                    waitingForNewNumber = true;
+                }
+                updateDisplay();
+            };
+
+
+            // Handle operator input (including equals)
+            const handleOperator = (nextOperator) => {
+                const inputValue = parseFloat(currentInput);
+
+                if (previousValue === null) {
+                    previousValue = inputValue;
+                } else if (operator && !waitingForNewNumber) {
+                    const result = calculate(previousValue, inputValue, operator);
+                    
+                    if (result === "Error") {
+                        currentInput = "Error";
+                        previousValue = null;
+                        operator = null;
+                        waitingForNewNumber = true;
+                        updateDisplay();
+                        return;
+                    }
+                    
+                    currentInput = String(result);
+                    previousValue = result;
+                }
+
+                if (nextOperator === '=') {
                     operator = null;
                     waitingForNewNumber = true;
-                    updateDisplay();
-                    return NaN;
+                } else {
+                    operator = nextOperator;
+                    waitingForNewNumber = true;
                 }
+                updateDisplay();
             };
 
             // Clear function
@@ -202,8 +262,10 @@
                         inputDigit(value);
                     } else if (['+', '-', '*', '/', '='].includes(value)) {
                         handleOperator(value);
-                    } else if (value === 'C') {
+                    } else if (value === 'C' || value === 'AC') {
                         clearCalculator();
+                    } else if (['sqrt', '%'].includes(value)) {
+                        handleUtility(value);
                     }
                 });
             });
@@ -211,12 +273,10 @@
             // Initial display setup
             updateDisplay();
 
-            // --- Check for URL Parameters (Requirement 4: Although not strictly required for the calculator logic, 
-            // this ensures compliance with the check structure) ---
+            // --- Check for URL Parameters ---
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('url') || urlParams.has('token')) {
                 console.log("URL parameter detected. App running.");
-                // In a real app, these parameters would be used for configuration or state loading.
             }
         });
     </script>
